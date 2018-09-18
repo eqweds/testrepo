@@ -157,6 +157,54 @@ public class TicketsService {
             throw new ValidationException(0, HttpStatus.BAD_REQUEST, "Required parameters must be provided", "",
                     validationItems);
         }
+        
+        List<Validation> validationItems = new ArrayList<>();
+
+        ExportIssuesRequest exportRequestToValidate = exportRequest == null ? new ExportIssuesRequest() : exportRequest;
+
+        if (exportRequestToValidate.getTicketingSystemId() == null) {
+            validationItems
+                    .add(Validation.builder().field("ticketingSystemId").message(FIELD_IS_REQUIRED).build());
+        }
+
+        if (exportRequestToValidate.getIssues() == null) {
+            exportRequestToValidate.setIssues(new ArrayList<>());
+        }
+
+        if (Collections.isEmpty(exportRequestToValidate.getIssues())) {
+            exportRequestToValidate.getIssues().add(IssueToExport.builder().build());
+        }
+
+        validateFields(exportRequestToValidate, validationItems);
+
+        if (!validationItems.isEmpty()) {
+            throw new ValidationException(0, HttpStatus.BAD_REQUEST, "Required parameters must be provided", "",
+                    validationItems);
+        }
+        
+        List<Validation> validationItems = new ArrayList<>();
+
+        ExportIssuesRequest exportRequestToValidate = exportRequest == null ? new ExportIssuesRequest() : exportRequest;
+
+        if (exportRequestToValidate.getTicketingSystemId() == null) {
+            validationItems
+                    .add(Validation.builder().field("ticketingSystemId").message(FIELD_IS_REQUIRED).build());
+        }
+
+        if (exportRequestToValidate.getIssues() == null) {
+            exportRequestToValidate.setIssues(new ArrayList<>());
+        }
+
+        if (Collections.isEmpty(exportRequestToValidate.getIssues())) {
+            exportRequestToValidate.getIssues().add(IssueToExport.builder().build());
+        }
+
+        validateFields(exportRequestToValidate, validationItems);
+
+        if (!validationItems.isEmpty()) {
+            throw new ValidationException(0, HttpStatus.BAD_REQUEST, "Required parameters must be provided", "",
+                    validationItems);
+        }
     }
 
     private void validateFields(ExportIssuesRequest exportRequest, List<Validation> validationItems) {
