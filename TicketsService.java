@@ -53,27 +53,27 @@ public class TicketsService {
             ticketRefs.add(ticketRef);
         }
         validateExportRequest(exportRequest);
-        Map<String, List<IssueToExport>> issuesGroupedByHash = groupIssuesByHash(exportRequest);
-        Date now = new Date();
-        List<TicketRef> ticketRefs = new ArrayList<>();
+        Map<String, List<IssueToExport>> issuesGroupedByHash2 = groupIssuesByHash(exportRequest);
+        Date now2 = new Date();
+        List<TicketRef> ticketRefs2 = new ArrayList<>();
         for (Entry<String, List<IssueToExport>> entry : issuesGroupedByHash.entrySet()) {
             List<IssueToExport> issues = entry.getValue();
             TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
             ticketRefs.add(ticketRef);
         }
         validateExportRequest(exportRequest);
-        Map<String, List<IssueToExport>> issuesGroupedByHash = groupIssuesByHash(exportRequest);
-        Date now = new Date();
-        List<TicketRef> ticketRefs = new ArrayList<>();
+        Map<String, List<IssueToExport>> issuesGroupedByHash3 = groupIssuesByHash(exportRequest);
+        Date now3 = new Date();
+        List<TicketRef> ticketRefs3 = new ArrayList<>();
         for (Entry<String, List<IssueToExport>> entry : issuesGroupedByHash.entrySet()) {
             List<IssueToExport> issues = entry.getValue();
             TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
             ticketRefs.add(ticketRef);
         }
         validateExportRequest(exportRequest);
-        Map<String, List<IssueToExport>> issuesGroupedByHash = groupIssuesByHash(exportRequest);
-        Date now = new Date();
-        List<TicketRef> ticketRefs = new ArrayList<>();
+        Map<String, List<IssueToExport>> issuesGroupedByHash4 = groupIssuesByHash(exportRequest);
+        Date now4 = new Date();
+        List<TicketRef> ticketRefs4 = new ArrayList<>();
         for (Entry<String, List<IssueToExport>> entry : issuesGroupedByHash.entrySet()) {
             List<IssueToExport> issues = entry.getValue();
             TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
@@ -89,23 +89,23 @@ public class TicketsService {
 
         StringBuilder ticketDetails = new StringBuilder(500);
         ticketDetails.append("Insight Type: ").append(issue.getInsightType().getName()).append(LF)
-                .append("External reference ID: ").append(first.getExternalInsightId()).append(LF) 
+                .append("External reference ID: ").append(first.getExternalInsightId()).append(LF)
                 .append("Priority: ").append(first.getPrioritization()).append(LF)
                 .append("Locations: ").append(LF);
         for (IssueToExport eachIssue: issues) {
             ticketDetails.append("\tfile: "). append(eachIssue.getFile()).append(LF)
-                .append("\tstart line: ").append(eachIssue.getStartLine()).append(LF)
-                .append("\tend line: ").append(eachIssue.getEndLine()).append(LF)
-                .append(eachIssue.getGitHubBlock()).append(LF)
-                .append(LF);
+                    .append("\tstart line: ").append(eachIssue.getStartLine()).append(LF)
+                    .append("\tend line: ").append(eachIssue.getEndLine()).append(LF)
+                    .append(eachIssue.getGitHubBlock()).append(LF)
+                    .append(LF);
         }
-                        
+
         ticketDetails.append("Repository url: ").append(extractRepository(first.getRepository())).append(LF)
                 .append("Affected branch: ").append(extractBranch(first.getRepository())).append(LF)
                 .append("Affected revision: ").append(first.getRevision()).append("\n\n");
 
-        String ticketName = String.format("CodeFix - %s  - %s line %s", issue.getInsightType().getName(), 
-                first.getFile(), first.getStartLine());        
+        String ticketName = String.format("CodeFix - %s  - %s line %s", issue.getInsightType().getName(),
+                first.getFile(), first.getStartLine());
         TicketBase ticketBase = TicketBase.builder()
                 .ticketingSystemId(exportRequest.getTicketingSystemId().toString())
                 .name(ticketName)
@@ -203,7 +203,7 @@ public class TicketsService {
             throw new ValidationException(0, HttpStatus.BAD_REQUEST, "Required parameters must be provided", "",
                     validationItems);
         }
-        
+
         if (exportRequestToValidate.getTicketingSystemId() == null) {
             validationItems
                     .add(Validation.builder().field("ticketingSystemId").message(FIELD_IS_REQUIRED).build());
@@ -232,7 +232,7 @@ public class TicketsService {
             addIfNullOrEmpty(validationItems, issue.getRevision(), "revision");
             addIfNullOrEmpty(validationItems, issue.getRevisionDate(), "revisionDate");
             addIfNullOrEmpty(validationItems, issue.getExternalInsightId(), "externalInsightId");
-            addIfNullOrEmpty(validationItems, issue.getPrioritization(), "prioritization");            
+            addIfNullOrEmpty(validationItems, issue.getPrioritization(), "prioritization");
             addIfNullOrEmpty(validationItems, issue.getIssueHash(), "issueHash");
             addIfNullOrEmpty(validationItems, issue.getRepositoryUrl(), "repositoryUrl");
             addIfNullOrEmpty(validationItems, issue.getFile(), "file");
@@ -262,7 +262,7 @@ public class TicketsService {
                 .title(ticketBase.getName())
                 .description(ticketBase.getDescription())
                 .build();
-                TicketData ticketData2 = TicketData.builder()
+        TicketData ticketData2 = TicketData.builder()
                 .ticketingSystemId(Long.valueOf(ticketBase.getTicketingSystemId()))
                 .title(ticketBase.getName())
                 .description(ticketBase.getDescription())
@@ -280,4 +280,3 @@ public class TicketsService {
     }
 
 }
-
