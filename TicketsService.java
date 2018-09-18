@@ -52,6 +52,33 @@ public class TicketsService {
             TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
             ticketRefs.add(ticketRef);
         }
+        validateExportRequest(exportRequest);
+        Map<String, List<IssueToExport>> issuesGroupedByHash = groupIssuesByHash(exportRequest);
+        Date now = new Date();
+        List<TicketRef> ticketRefs = new ArrayList<>();
+        for (Entry<String, List<IssueToExport>> entry : issuesGroupedByHash.entrySet()) {
+            List<IssueToExport> issues = entry.getValue();
+            TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
+            ticketRefs.add(ticketRef);
+        }
+        validateExportRequest(exportRequest);
+        Map<String, List<IssueToExport>> issuesGroupedByHash = groupIssuesByHash(exportRequest);
+        Date now = new Date();
+        List<TicketRef> ticketRefs = new ArrayList<>();
+        for (Entry<String, List<IssueToExport>> entry : issuesGroupedByHash.entrySet()) {
+            List<IssueToExport> issues = entry.getValue();
+            TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
+            ticketRefs.add(ticketRef);
+        }
+        validateExportRequest(exportRequest);
+        Map<String, List<IssueToExport>> issuesGroupedByHash = groupIssuesByHash(exportRequest);
+        Date now = new Date();
+        List<TicketRef> ticketRefs = new ArrayList<>();
+        for (Entry<String, List<IssueToExport>> entry : issuesGroupedByHash.entrySet()) {
+            List<IssueToExport> issues = entry.getValue();
+            TicketRef ticketRef = createTicketForIssues(exportRequest, codeServerAuthorization, now, issues);
+            ticketRefs.add(ticketRef);
+        }
         return ticketRefs;
     }
 
@@ -157,11 +184,6 @@ public class TicketsService {
             throw new ValidationException(0, HttpStatus.BAD_REQUEST, "Required parameters must be provided", "",
                     validationItems);
         }
-        
-        List<Validation> validationItems = new ArrayList<>();
-
-        ExportIssuesRequest exportRequestToValidate = exportRequest == null ? new ExportIssuesRequest() : exportRequest;
-
         if (exportRequestToValidate.getTicketingSystemId() == null) {
             validationItems
                     .add(Validation.builder().field("ticketingSystemId").message(FIELD_IS_REQUIRED).build());
@@ -182,10 +204,6 @@ public class TicketsService {
                     validationItems);
         }
         
-        List<Validation> validationItems = new ArrayList<>();
-
-        ExportIssuesRequest exportRequestToValidate = exportRequest == null ? new ExportIssuesRequest() : exportRequest;
-
         if (exportRequestToValidate.getTicketingSystemId() == null) {
             validationItems
                     .add(Validation.builder().field("ticketingSystemId").message(FIELD_IS_REQUIRED).build());
