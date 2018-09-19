@@ -1,0 +1,114 @@
+package com.devfactory.codefix.service.impl;
+
+import com.devfactory.codefix.client.codeserver.CodeServerRepositoryClient;
+import com.devfactory.codefix.client.codeserver.UserRepository;
+import com.devfactory.codefix.client.codeserver.UserRepositoryPage;
+import com.devfactory.codefix.common.exception.CodeServerDataValidationException;
+import com.devfactory.codefix.service.RepositoryService;
+import com.devfactory.codefix.service.dto.Repository;
+import com.devfactory.codefix.service.dto.Repository.KindEnum;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
+
+@Slf4j
+@Service
+public class RepositoryServiceImpl implements RepositoryService {
+
+    private final CodeServerRepositoryClient codeServerServiceClient;
+
+    RepositoryServiceImpl(CodeServerRepositoryClient codeServerServiceClient) {
+        this.codeServerServiceClient = codeServerServiceClient;
+    }
+
+    @Override
+    public Slice<Repository> listInsightsForRepositories(String codeServerAuthorization, Pageable pageable) {
+
+        UserRepositoryPage userRepositoryPage = codeServerServiceClient
+                .getCodeServerRepoByAuthenticatedUser(codeServerAuthorization, pageable);
+
+        if (userRepositoryIsEmpty(userRepositoryPage)) {
+            return emptyPage(pageable);
+        }
+
+        List<Repository> repositoryList = userRepositoryPage.getUserRepositoryList().stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
+
+        Boolean hasNext = validUrl(userRepositoryPage.getNext());
+
+        return new SliceImpl<>(repositoryList, pageable, hasNext);
+    }
+
+    private Repository toDto(UserRepository userRepository) {
+        com.devfactory.codefix.client.codeserver.Repository codeServerRepository = codeServerServiceClient
+                .getCodeServerRepoById(userRepository.getId());
+        Assert.notNull(userRepository, "CODESERVER userRepository should not be null");
+        Assert.notNull(codeServerRepository, "CODESERVER userRepository should not be null");
+
+        String dfScmUrl = formatDfscmUrl(codeServerRepository);
+        return Repository.builder()
+                .id(codeServerRepository.getId())
+                .dfScmUrl(dfScmUrl)
+                .kind(KindEnum.REPOSITORY)
+                .name(codeServerRepository.getBranch())
+                .linesOfCode(codeServerRepository.getLinesOfCode())
+                .build();
+    }
+
+    private String formatDfscmUrl(com.devfactory.codefix.client.codeserver.Repository codeServerRepository) {
+        if (StringUtils.isBlank(codeServerRepository.getRemoteUrl())) {
+            throw new CodeServerDataValidationException(String.format("Repository `remoteUrl` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        return String.format("%s?branch=%s", codeServerRepository.getRemoteUrl(), codeServerRepository.getBranch());
+    }
+
+    private boolean userRepositoryIsEmpty(UserRepositoryPage userRepositoryPage) {
+        return userRepositoryPage == null || userRepositoryPage.getUserRepositoryList() == null;
+    }
+
+    private Slice<Repository> emptyPage(Pageable pageable) {
+        List<Repository> emptyInsights = new ArrayList<>();
+        return new SliceImpl<>(emptyInsights, pageable, false);
+    }
+
+    private boolean validUrl(String url) {
+        if (StringUtils.isBlank(url)) {
+            return false;
+        }
+        try {
+            URL urlObj = new URL(url);
+            URI validated = urlObj.toURI();
+            log.debug("validated URI: " + validated.toString());
+            return true;
+        } catch (MalformedURLException | URISyntaxException e) {
+            log.debug("Invalid URL '{}'", url);
+            return false;
+        }
+    }
+
+}
