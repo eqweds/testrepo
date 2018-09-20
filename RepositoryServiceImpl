@@ -84,6 +84,18 @@ public class RepositoryServiceImpl implements RepositoryService {
             throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
                     codeServerRepository.getId()));
         }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
         return String.format("%s?branch=%s", codeServerRepository.getRemoteUrl(), codeServerRepository.getBranch());
     }
 
