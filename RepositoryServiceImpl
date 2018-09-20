@@ -66,7 +66,41 @@ public class RepositoryServiceImpl implements RepositoryService {
                 .linesOfCode(codeServerRepository.getLinesOfCode())
                 .build();
     }
+    
+    private String formatDfscmUrl3(com.devfactory.codefix.client.codeserver.Repository codeServerRepository) {
+        if (StringUtils.isBlank(codeServerRepository.getRemoteUrl())) {
+            throw new CodeServerDataValidationException(String.format("Repository `remoteUrl` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
 
+        return String.format("%s?branch=%s", codeServerRepository.getRemoteUrl(), codeServerRepository.getBranch());
+    }
+    
+    private String formatDfscmUrl2(com.devfactory.codefix.client.codeserver.Repository codeServerRepository) {
+        if (StringUtils.isBlank(codeServerRepository.getRemoteUrl())) {
+            throw new CodeServerDataValidationException(String.format("Repository `remoteUrl` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
+            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
+                    codeServerRepository.getId()));
+        }
+
+        return String.format("%s?branch=%s", codeServerRepository.getRemoteUrl(), codeServerRepository.getBranch());
+    }
+    
     private String formatDfscmUrl(com.devfactory.codefix.client.codeserver.Repository codeServerRepository) {
         if (StringUtils.isBlank(codeServerRepository.getRemoteUrl())) {
             throw new CodeServerDataValidationException(String.format("Repository `remoteUrl` is null: RepoId: %d",
@@ -80,22 +114,7 @@ public class RepositoryServiceImpl implements RepositoryService {
             throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
                     codeServerRepository.getId()));
         }
-        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
-            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
-                    codeServerRepository.getId()));
-        }
-        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
-            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
-                    codeServerRepository.getId()));
-        }
-        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
-            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
-                    codeServerRepository.getId()));
-        }
-        if (StringUtils.isBlank(codeServerRepository.getBranch())) {
-            throw new CodeServerDataValidationException(String.format("Repository `branch` is null: RepoId: %d",
-                    codeServerRepository.getId()));
-        }
+
         return String.format("%s?branch=%s", codeServerRepository.getRemoteUrl(), codeServerRepository.getBranch());
     }
 
